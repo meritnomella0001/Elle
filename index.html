@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Elle Lee TV – Celebrity Videos</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+    body {
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      color: #ff8a65;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #ccc;
+      margin-bottom: 30px;
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .video-column {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 750px;
+      gap: 40px;
+    }
+
+    .video-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 15px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+      transition: 0.3s;
+    }
+
+    .video-card:hover {
+      transform: scale(1.01);
+      box-shadow: 0 8px 50px rgba(0,0,0,0.8);
+    }
+
+    .video-thumb {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      background: #333;
+    }
+
+    .video-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 0.3s;
+    }
+
+    .video-thumb:hover img {
+      filter: brightness(0.8);
+    }
+
+    .thumb-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-size: 50px;
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    .video-info h2 {
+      font-size: 1.3rem;
+      margin-top: 10px;
+      color: #ffab91;
+    }
+
+    .video-meta {
+      font-size: 0.85rem;
+      color: #ffc107;
+      margin-bottom: 8px;
+    }
+
+    .video-info p {
+      font-size: 0.95rem;
+      color: #ddd;
+      line-height: 1.4rem;
+    }
+
+    .video-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .video-actions button {
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, #ff5722, #ff8a65);
+      border: none;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+
+    .video-actions button:hover {
+      filter: brightness(1.1);
+    }
+
+    .material-icons {
+      margin-right: 5px;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 0.8rem;
+      color: #555;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .video-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .video-actions button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎥 Elle Lee TV</h1>
+<p class="subtitle">Exclusive videos from Elle Lee. Watch & download your favorite moments. Ads support the content ❤️</p>
+
+<div class="video-column" id="videoColumn"></div>
+
+<script>
+// Replace with your CPC SmartLink
+const CPC_LINK = "https://www.revenuecpmgate.com/tsqbhsavn?key=670942eb8cd2712ec809aa922b91f031";
+
+// Video data
+const videos = [
+  {
+    title: "Behind the Scenes – Elle's Album",
+    description: "Exclusive look at Elle Lee’s new album shoot.",
+    url: "https://raw.githubusercontent.com/username/repo/main/elle1.mp4",
+    thumbnail: "https://yourcdn.com/thumb1.jpg",
+    time: "12:34",
+    date: "August 25, 2025"
+  },
+  {
+    title: "Elle Lee Live – Concert Highlight",
+    description: "Relive Elle's epic live show.",
+    url: "https://raw.githubusercontent.com/username/repo/main/elle2.mp4",
+    thumbnail: "https://yourcdn.com/thumb2.jpg",
+    time: "9:08",
+    date: "August 26, 2025"
+  },
+  {
+    title: "Personal Message to Fans 💬",
+    description: "A thank-you note from Elle herself.",
+    url: "https://raw.githubusercontent.com/username/repo/main/elle3.mp4",
+    thumbnail: "https://yourcdn.com/thumb3.jpg",
+    time: "6:15",
+    date: "August 28, 2025"
+  },
+  {
+    title: "Elle's Fashion Shoot",
+    description: "Behind the lens of Elle Lee's photoshoot.",
+    url: "https://raw.githubusercontent.com/username/repo/main/elle4.mp4",
+    thumbnail: "https://yourcdn.com/thumb4.jpg",
+    time: "8:45",
+    date: "August 30, 2025"
+  }
+];
+
+const videoColumn = document.getElementById("videoColumn");
+
+videos.forEach((video, index) => {
+  const card = document.createElement("div");
+  card.classList.add("video-card");
+
+  card.innerHTML = `
+    <div class="video-thumb" onclick="handlePlay('${index}', '${video.url}')">
+      <img src="${video.thumbnail}" alt="${video.title}">
+      <div class="thumb-overlay">
+        <span class="material-icons">play_circle_filled</span>
+      </div>
+    </div>
+    <div class="video-info">
+      <h2>${video.title}</h2>
+      <div class="video-meta">⏱ ${video.time} | 📅 ${video.date}</div>
+      <p>${video.description}</p>
+    </div>
+    <div class="video-actions">
+      <button onclick="handlePlay('${index}', '${video.url}')">
+        <span class="material-icons">play_arrow</span> Play
+      </button>
+      <button onclick="handleDownload('${index}', '${video.url}')">
+        <span class="material-icons">download</span> Download
+      </button>
+    </div>
+    <div id="videoContainer${index}"></div>
+  `;
+
+  videoColumn.appendChild(card);
+});
+
+// Replace thumbnail with video on click
+function handlePlay(index, url) {
+  window.open(CPC_LINK, "_blank");
+
+  const container = document.getElementById("videoContainer" + index);
+  container.innerHTML = `
+    <video width="100%" controls autoplay muted style="margin-top:15px; border-radius:10px;">
+      <source src="${url}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  `;
+  container.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function handleDownload(index, url) {
+  window.open(CPC_LINK, "_blank");
+  setTimeout(() => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "";
+    a.click();
+  }, 700);
+}
+</script>
+
+<footer>
+  &copy; 2025 Elle Lee | Designed by vero | All Rights Reserved
+</footer>
+
+</body>
+</html>
